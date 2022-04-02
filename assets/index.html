@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Weather Server</title>
+</head>
+<body>
+    <h1>Get Weather Data</h1>
+    <div>
+        <input id="location" type="text" placeholder="Enter location Name"/>
+        <select id="day">
+            <option value="" selected>None</option>
+            <option value="today">Today</option>
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+         </select>
+        <button id="myBtn" onclick="request()">Submit</button>
+    </div>
+    <br/>
+    <div>
+       <textarea id='container' cols="30" rows="10"></textarea>
+    </div>
+</body>
+<script>
+    function request() {
+        let data = document.getElementById("location").value;
+        if (data.trim().length < 1) {
+            alert("No input");
+        } else {
+            let day = document.getElementById("day").value;
+            let url = 'http://localhost:8080/weather/' + data
+            day ? url = url + '/' + day : ''
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let ele = document.getElementById('container');
+                    ele.innerHTML = JSON.stringify(data,null,2);
+                })
+                .catch(function (err) {
+                    alert('Got Error from server: ', err);
+                });
+        }
+    }
+</script>
+<style>
+    textarea {
+        width: 50%;
+        min-height: 30rem;
+        font-family: "Lucida Console", Monaco, monospace;
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+</style>
+</html>
